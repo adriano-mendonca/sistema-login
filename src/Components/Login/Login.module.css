@@ -1,0 +1,12 @@
+.login {
+  min-height: 100vh;
+}
+
+.forms {
+  max-width: 30rem;
+  padding: 2rem;
+  margin: 8rem auto 0 auto;
+  background-color: #fff;
+  border-radius: 2rem;
+  box-shadow: 3px 3px 6px rgba(0,0,0, .6);
+}

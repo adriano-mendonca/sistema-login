@@ -1,0 +1,10 @@
+.searchBar {
+  display: flex;
+  gap: 1.5rem;
+  margin: 1.5rem auto;
+
+}
+
+.btn {
+  padding: 80px !important; 
+}
