@@ -10,17 +10,15 @@ const Header = () => {
   return (
     <header className={styles.header}>
       <nav className={`${styles.nav} container`}>
-        <Link
-          className={styles.logo}
-          to="/home"
-          aria-label="MegaHistory - Home"
-        >
+        <Link className={styles.logo} to="/" aria-label="Megalink - Home">
           <Logo className={styles.logop} />
         </Link>
+        <Link to='/' className={styles.menu}>Home</Link>
+        <Link to='/cadastro' className={styles.menu}>Cadastro</Link>
         {data && (
           <div className="header-nav">
-            <Link className={styles.login} to="/home">
-              {data.username}
+            <Link className={styles.login} to="/">
+              {data.name}
             </Link>
             <button className="exit" onClick={userLogout}>
               Sair

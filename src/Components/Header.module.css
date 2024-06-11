@@ -3,7 +3,9 @@
   position: fixed;
   width: 100%;
   z-index: 100;
-  background: white;
+  background: #222a3f;
+  border-bottom: 2px solid #3152a4;
+  box-shadow: 0px 2px 3px #3152a4;
   top: 0;
 }
 
@@ -19,7 +21,7 @@
 }
 
 .login {
-  color: #333;
+  color: #ddd;
   display: flex;
   align-items: center;
 }
@@ -38,4 +40,17 @@
 .logop {
   max-width: 100px;
   max-height: 55px;
+}
+
+.menu {
+  color: #ddd;
+  display: flex;
+  align-items: center;
+  transition: 0.3s;
+}
+
+.menu::hover {
+  color: #fff;
+  font-weight: bold;
+  text-decoration: underline;
 }

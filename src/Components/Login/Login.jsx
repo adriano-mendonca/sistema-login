@@ -4,13 +4,15 @@ import LoginForm from "./LoginForm";
 import UserContext from "../../UserContext";
 import styles from "./Login.module.css";
 import LoginCreate from "./LoginCreate";
+import { Head } from "../Head";
 
 const Login = () => {
   const { login } = React.useContext(UserContext);
 
-  if (login === true) return <Navigate to="/home" />;
+  if (login === true) return <Navigate to="/" />;
   return (
     <section className={styles.login}>
+      <Head />
       <div className={styles.forms}>
         <Routes>
           <Route path="/" element={<LoginForm />} />

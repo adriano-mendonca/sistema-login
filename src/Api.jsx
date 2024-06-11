@@ -62,3 +62,53 @@ export function PASSWORD_LOST(body) {
     },
   };
 }
+
+export function FORNECEDOR_GET(token) {
+  return {
+    url: API_URL + "/api/fornecedor",
+    options: {
+      method: "GET",
+      headers: {
+        Authorization: token,
+      },
+    },
+  };
+}
+
+export function APROVADOR_GET(token) {
+  return {
+    url: API_URL + "/api/aprovador",
+    options: {
+      method: "GET",
+      headers: {
+        Authorization: token,
+      },
+    },
+  };
+}
+
+export function CONTA_POST(token, body) {
+  return {
+    url: API_URL + "/conta",
+    options: {
+      method: "POST",
+      headers: {
+        Authorization: token,
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(body),
+    },
+  };
+}
+
+export function CONTA_GET(token) {
+  return {
+    url: API_URL + "/conta/lista",
+    options: {
+      method: "GET",
+      headers: {
+        Authorization: token,
+      },
+    },
+  };
+}
