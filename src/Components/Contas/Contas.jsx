@@ -1,14 +1,10 @@
 import React from "react";
-import styles from "./Contas.module.css";
-import UserContext from "../../UserContext";
 import { CONTA_GET } from "../../Api";
+import Table from "../Table/Table";
 
 export const Contas = () => {
-  const { data } = React.useContext(UserContext);
   const [contas, setContas] = React.useState(null);
-  const dataContas = React.useMemo(() => contas, [])
-  const columns = React.useMemo(() => [])
-
+  const dataContas = React.useMemo(() => contas, [contas]);
 
   React.useEffect(() => {
     async function getContas() {
@@ -17,12 +13,17 @@ export const Contas = () => {
         const { url, options } = CONTA_GET(token);
         const response = await fetch(url, options);
         const json = await response.json();
-        console.log(json)
         setContas(json);
       }
     }
     getContas();
+    
   }, []);
 
-  return <div>teste 123</div>;
+  if (contas === null) return null;
+  return (
+    <div className="tabela">
+      <Table data={dataContas} />
+    </div>
+  );
 };

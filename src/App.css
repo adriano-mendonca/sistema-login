@@ -108,6 +108,52 @@ a {
   border-radius: 0.4rem;
 }
 
+table {
+  border-collapse: separate;
+  border-spacing: 0 10px;
+  width: 100%;
+  text-align: left;
+}
+
+th {
+  padding: 10px;
+  border-bottom: 1px solid white;
+  color: white;
+  text-align: center;
+}
+
+td {
+  padding: 10px;
+  border-bottom: 1px solid #333;
+  border-right: 1px solid #333;
+  color: white;
+}
+
+.tabela {
+  max-width: 1200px;
+  background-color: #222A3F;
+  margin: 0 auto;
+  padding: 1rem;
+  border-radius: 20px;
+  border-bottom: 2px solid #3152a4;
+  box-shadow: 2px 2px 2px #3152a4;
+}
+
+.select {
+  padding: 8px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  margin-top: 10px;
+  font-size: 14px;
+  color: #d2d2d2;
+  background-color: #222A3F;
+}
+
+.select:focus{
+  border-color: #007bff;
+  outline: none;
+}
+
 @keyframes animeLeft {
   to {
     opacity: 1;

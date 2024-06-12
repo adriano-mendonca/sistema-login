@@ -5,7 +5,7 @@ import Logo from "../Assets/logo.svg?react";
 import { UserContext } from "../UserContext";
 
 const Header = () => {
-  const { data, userLogout } = React.useContext(UserContext);
+  const { data, userLogout, login } = React.useContext(UserContext);
 
   return (
     <header className={styles.header}>
@@ -13,8 +13,16 @@ const Header = () => {
         <Link className={styles.logo} to="/" aria-label="Megalink - Home">
           <Logo className={styles.logop} />
         </Link>
-        <Link to='/' className={styles.menu}>Home</Link>
-        <Link to='/cadastro' className={styles.menu}>Cadastro</Link>
+        {login ? (
+          <Link to="/" className={styles.menu}>
+            Home
+          </Link>
+        ) : null}
+        {login ? (
+          <Link to="/cadastro" className={styles.menu}>
+            Cadastro
+          </Link>
+        ) : null}
         {data && (
           <div className="header-nav">
             <Link className={styles.login} to="/">

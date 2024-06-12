@@ -1,0 +1,186 @@
+import React from "react";
+import { useFilters, useTable } from "react-table";
+import StatusColumnFilter from "../ColumnFilter/StatusColumnFilter";
+import { STATUS_POST } from "../../Api";
+
+const Table = ({ data }) => {
+  const [tableData, setTableData] = React.useState(data);
+  const [tempStatus, setTempStatus] = React.useState({});
+
+  // const handleStatusChange = (rowIndex, newStatus) => {
+  //   const newData = [...tableData];
+  //   newData[rowIndex].status = newStatus;
+  //   setTableData(newData);
+  // };
+
+  const handleStatusChange = (rowIndex, newStatus) => {
+    setTempStatus((prev) => ({
+      ...prev,
+      [rowIndex]: newStatus,
+    }));
+  };
+
+  async function handleStatus(event, rowIndex, idConta) {
+    event.preventDefault();
+    const newStatus = tempStatus[rowIndex];
+    const newData = [...tableData];
+    const rowToUpdate = newData.find((row) => row.id_conta === idConta);
+    const body = {
+      status: Number(newStatus),
+      id_conta: idConta,
+    };
+
+    const token = window.localStorage.getItem("token");
+    if (token) {
+      const { url, options } = STATUS_POST(token, body);
+      const response = await fetch(url, options);
+      const json = await response.json();
+      console.log(json);
+    }
+
+    if (rowToUpdate) {
+      rowToUpdate.status = parseInt(newStatus, 10);
+      setTableData(newData);
+    }
+  }
+
+  const columns = React.useMemo(
+    () => [
+      {
+        accessor: "id_conta",
+        Header: "ID",
+        Filter: "",
+      },
+      {
+        accessor: "centro_custo",
+        Header: "Centro de Custo",
+        Filter: "",
+      },
+      {
+        accessor: "fornecedor",
+        Header: "Fornecedor",
+        Filter: "",
+      },
+      {
+        accessor: "valor",
+        Header: "Valor",
+        Filter: "",
+      },
+      {
+        accessor: "nf",
+        Header: "NF",
+        Filter: "",
+      },
+      {
+        accessor: "descricao",
+        Header: "Descrição",
+        Filter: "",
+      },
+      {
+        accessor: "observacao",
+        Header: "Observação",
+        Filter: "",
+      },
+      {
+        accessor: "usuario_aprovador",
+        Header: "Aprovador",
+        Filter: "",
+      },
+      {
+        accessor: "usuario_solicitante",
+        Header: "Solicitante",
+        Filter: "",
+      },
+      {
+        accessor: "status",
+        Header: "Status",
+        Filter: StatusColumnFilter,
+        filter: "includes",
+        Cell: ({ row }) => (
+          <form
+            onSubmit={(e) => handleStatus(e, row.index, row.original.id_conta)}
+            style={{
+              display: "flex",
+              gap: "5px",
+            }}
+          >
+            <select
+              value={tempStatus[row.index] || row.original.status}
+              onChange={(e) => handleStatusChange(row.index, e.target.value)}
+            >
+              <option value="1">Aprovado</option>
+              <option value="2">Pendente</option>
+              <option value="3">Rejeitado </option>
+            </select>
+            <button type="submit">Salvar</button>
+          </form>
+        ),
+      },
+    ],
+    [tempStatus]
+  );
+
+  // [
+  //   ({
+  //     centro_custo: "Centro Teste",
+  //     descricao: "Desc teste",
+  //     fornecedor: " BANCO C6 S.A.",
+  //     id_aprovador: 5,
+  //     id_conta: 8,
+  //     id_solicitante: 5,
+  //     nf: "0102",
+  //     observacao: "Obs teste",
+  //     status: 1,
+  //     valor: "1000",
+  //   },
+  //   {
+  //     centro_custo: "Teste 2",
+  //     descricao: "Teste 2 ",
+  //     fornecedor: " E C GUALBERTO & CIA LTDA",
+  //     id_aprovador: 5,
+  //     id_conta: 9,
+  //     id_solicitante: 5,
+  //     nf: "123",
+  //     observacao: "Teste 2",
+  //     status: 2,
+  //     valor: "8000",
+  //   })
+  // ];
+
+  const { getTableProps, getTableBodyProps, headerGroups, rows, prepareRow } =
+    useTable({ columns, data }, useFilters);
+  return (
+    <div className="animeLeft">
+      <table {...getTableProps()}>
+        <thead>
+          {headerGroups.map((headerGroup) => (
+            <tr {...headerGroup.getHeaderGroupProps()}>
+              {headerGroup.headers.map((column) => (
+                <th {...column.getHeaderProps()}>
+                  {column.render("Header")}
+                  <div>{column.canFilter ? column.render("Filter") : null}</div>
+                </th>
+              ))}
+            </tr>
+          ))}
+        </thead>
+        <tbody {...getTableBodyProps()}>
+          {rows.map((row) => {
+            prepareRow(row);
+            return (
+              <tr {...row.getRowProps()}>
+                {row.cells.map((cell) => {
+                  return (
+                    <td {...cell.getCellProps()}>{cell.render("Cell")}</td>
+                  );
+                })}
+              </tr>
+            );
+          })}
+        </tbody>
+      </table>
+    </div>
+  );
+};
+
+export default Table;

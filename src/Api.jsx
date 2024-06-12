@@ -112,3 +112,17 @@ export function CONTA_GET(token) {
     },
   };
 }
+
+export function STATUS_POST(token, body) {
+  return {
+    url: API_URL + "/conta/alterstatus",
+    options: {
+      method: "POST",
+      headers: {
+        Authorization: token,
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(body),
+    },
+  };
+}
