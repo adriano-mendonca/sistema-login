@@ -5,6 +5,7 @@ import UserContext from "../../UserContext";
 import styles from "./Login.module.css";
 import LoginCreate from "./LoginCreate";
 import { Head } from "../Head";
+import NotFound from "../NotFound";
 
 const Login = () => {
   const { login } = React.useContext(UserContext);
@@ -17,6 +18,7 @@ const Login = () => {
         <Routes>
           <Route path="/" element={<LoginForm />} />
           <Route path="create" element={<LoginCreate />} />
+          <Route path="*" element={<NotFound />} />
         </Routes>
       </div>
     </section>

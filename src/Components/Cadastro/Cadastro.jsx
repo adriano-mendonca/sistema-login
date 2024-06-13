@@ -103,7 +103,7 @@ const Cadastro = () => {
       <div className="content">
         <div className="container container-cadastro">
           <Head title={data.name} />
-          <h1 style={{ fontSize: "2.5rem" }}>Cadastro</h1>
+          <h1 className='title'>Cadastro</h1>
           <form onSubmit={handleSubmit}>
             <Input
               className="input"

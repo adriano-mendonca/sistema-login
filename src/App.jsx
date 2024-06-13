@@ -6,6 +6,7 @@ import Home from "./Components/Home.jsx";
 import { UserStorage } from "./UserContext.jsx";
 import ProtectedRoute from "./Helper/ProtectedRouter.jsx";
 import Cadastro from "./Components/Cadastro/Cadastro.jsx";
+import NotFound from "./Components/NotFound.jsx";
 
 const App = () => {
   return (
@@ -31,6 +32,7 @@ const App = () => {
               }
             />
             <Route path="/login/*" element={<Login />} />
+            <Route path="*" element={<NotFound />} />
           </Routes>
         </UserStorage>
       </BrowserRouter>

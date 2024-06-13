@@ -39,10 +39,11 @@ export const UserStorage = ({ children }) => {
       setLoading(true);
       const { url, options } = TOKEN_POST({ email, password });
       const tokenRes = await fetch(url, options);
-      if (!tokenRes.ok) {
+      const json = await tokenRes.json();
+      if (json.ok === false) {
         throw new Error(`Error: Usuário inválido`);
       }
-      const { token } = await tokenRes.json();
+      const { token } = json;
       window.localStorage.setItem("token", token);
       await getUser(token);
       navigate("/");

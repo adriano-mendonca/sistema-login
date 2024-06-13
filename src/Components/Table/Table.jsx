@@ -2,29 +2,12 @@ import React from "react";
 import { useFilters, useTable } from "react-table";
 import StatusColumnFilter from "../ColumnFilter/StatusColumnFilter";
 import { CONTA_GET, STATUS_POST } from "../../Api";
+import UserContext from "../../UserContext";
 
 const Table = ({ data }) => {
   const [tableData, setTableData] = React.useState(data);
   const [tempStatus, setTempStatus] = React.useState({});
-
-  // const handleStatusChange = (rowIndex, newStatus) => {
-  //   const newData = [...tableData];
-  //   newData[rowIndex].status = newStatus;
-  //   setTableData(newData);
-  // };
-
-  // React.useEffect(() => {
-  //   async function updateTable() {
-  //     const token = window.localStorage.getItem("token");
-  //     if (token) {
-  //       const { url, options } = CONTA_GET(token);
-  //       const response = await fetch(url, options);
-  //       const json = await response.json();
-  //       setTableData(json);
-  //     }
-  //   }
-  //   updateTable();
-  // }, []);
+  const { data: userData } = React.useContext(UserContext);
 
   const statusMap = {
     Aprovado: 1,
@@ -148,9 +131,15 @@ const Table = ({ data }) => {
               <option value="2">Pendente</option>
               <option value="3">Rejeitado </option>
             </select>
-            <button className="button" type="submit">
-              Salvar
-            </button>
+            {userData.name === row.original.usuario_aprovador ? (
+              <button className="button" type="submit">
+                Salvar
+              </button>
+            ) : (
+              <button className="button" type="submit" disabled>
+                Salvar
+              </button>
+            )}
           </form>
         ),
       },
@@ -187,6 +176,8 @@ const Table = ({ data }) => {
 
   const { getTableProps, getTableBodyProps, headerGroups, rows, prepareRow } =
     useTable({ columns, data }, useFilters);
+
+  if (userData === null) return null;
   return (
     <div className="animeLeft">
       <table {...getTableProps()}>
