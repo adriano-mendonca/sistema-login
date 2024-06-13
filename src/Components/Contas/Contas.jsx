@@ -17,7 +17,6 @@ export const Contas = () => {
       }
     }
     getContas();
-    
   }, []);
 
   if (contas === null) return null;

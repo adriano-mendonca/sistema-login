@@ -1,7 +1,7 @@
 import React from "react";
 import { useFilters, useTable } from "react-table";
 import StatusColumnFilter from "../ColumnFilter/StatusColumnFilter";
-import { STATUS_POST } from "../../Api";
+import { CONTA_GET, STATUS_POST } from "../../Api";
 
 const Table = ({ data }) => {
   const [tableData, setTableData] = React.useState(data);
@@ -12,6 +12,31 @@ const Table = ({ data }) => {
   //   newData[rowIndex].status = newStatus;
   //   setTableData(newData);
   // };
+
+  // React.useEffect(() => {
+  //   async function updateTable() {
+  //     const token = window.localStorage.getItem("token");
+  //     if (token) {
+  //       const { url, options } = CONTA_GET(token);
+  //       const response = await fetch(url, options);
+  //       const json = await response.json();
+  //       setTableData(json);
+  //     }
+  //   }
+  //   updateTable();
+  // }, []);
+
+  const statusMap = {
+    Aprovado: 1,
+    Pendente: 2,
+    Rejeitado: 3,
+  };
+
+  const reverseStatusMap = {
+    1: "Aprovado",
+    2: "Pendente",
+    3: "Rejeitado",
+  };
 
   const handleStatusChange = (rowIndex, newStatus) => {
     setTempStatus((prev) => ({
@@ -25,6 +50,7 @@ const Table = ({ data }) => {
     const newStatus = tempStatus[rowIndex];
     const newData = [...tableData];
     const rowToUpdate = newData.find((row) => row.id_conta === idConta);
+
     const body = {
       status: Number(newStatus),
       id_conta: idConta,
@@ -35,11 +61,10 @@ const Table = ({ data }) => {
       const { url, options } = STATUS_POST(token, body);
       const response = await fetch(url, options);
       const json = await response.json();
-      console.log(json);
     }
 
     if (rowToUpdate) {
-      rowToUpdate.status = parseInt(newStatus, 10);
+      rowToUpdate.status = reverseStatusMap[parseInt(newStatus, 10)];
       setTableData(newData);
     }
   }
@@ -95,7 +120,15 @@ const Table = ({ data }) => {
         accessor: "status",
         Header: "Status",
         Filter: StatusColumnFilter,
-        filter: "includes",
+        filter: (rows, id, filterValue) => {
+          if (!filterValue) return rows;
+          return rows.filter((row) => {
+            const rowValue = row.values[id];
+            return rowValue !== undefined
+              ? rowValue.includes(filterValue)
+              : true;
+          });
+        },
         Cell: ({ row }) => (
           <form
             onSubmit={(e) => handleStatus(e, row.index, row.original.id_conta)}
@@ -105,14 +138,19 @@ const Table = ({ data }) => {
             }}
           >
             <select
-              value={tempStatus[row.index] || row.original.status}
+              className="select"
+              value={
+                tempStatus[row.index] ?? statusMap[row.original.status] ?? ""
+              }
               onChange={(e) => handleStatusChange(row.index, e.target.value)}
             >
               <option value="1">Aprovado</option>
               <option value="2">Pendente</option>
               <option value="3">Rejeitado </option>
             </select>
-            <button type="submit">Salvar</button>
+            <button className="button" type="submit">
+              Salvar
+            </button>
           </form>
         ),
       },

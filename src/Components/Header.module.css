@@ -18,6 +18,7 @@
 
 .logo {
   padding: 0.5rem 0;
+  align-self: flex-start;
 }
 
 .login {
@@ -49,7 +50,7 @@
   transition: 0.3s;
 }
 
-.menu::hover {
+.menu:hover {
   color: #fff;
   font-weight: bold;
   text-decoration: underline;

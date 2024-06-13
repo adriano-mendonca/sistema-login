@@ -1,15 +1,13 @@
 import React from "react";
 
-const StatusColumnFilter = ({
-  column: { filterValue, setFilter, preFilteredRows, id },
-}) => {
-  const options = React.useMemo(() => {
-    const options = new Set();
-    preFilteredRows.forEach((row) => {
-      options.add(row.values[id]);
-    });
-    return [...options.values()];
-  }, [id, preFilteredRows]);
+const StatusColumnFilter = ({ column: { filterValue, setFilter } }) => {
+  const statusOptions = [
+    { value: "", label: "Todos" },
+    { value: "Aprovado", label: "Aprovado" },
+    { value: "Pendente", label: "Pendente" },
+    { value: "Rejeitado", label: "Rejeitado" },
+  ];
+
   return (
     <select
       className="select"
@@ -18,10 +16,9 @@ const StatusColumnFilter = ({
         setFilter(e.target.value || undefined);
       }}
     >
-      <option value="">Todos</option>
-      {options.map((option, i) => (
-        <option key={i} value={option}>
-          {option}
+      {statusOptions.map((option) => (
+        <option key={option.value} value={option.value}>
+          {option.label}
         </option>
       ))}
     </select>

@@ -13,16 +13,18 @@ const Header = () => {
         <Link className={styles.logo} to="/" aria-label="Megalink - Home">
           <Logo className={styles.logop} />
         </Link>
-        {login ? (
-          <Link to="/" className={styles.menu}>
-            Home
-          </Link>
-        ) : null}
-        {login ? (
-          <Link to="/cadastro" className={styles.menu}>
-            Cadastro
-          </Link>
-        ) : null}
+        <div className="header-nav">
+          {login ? (
+            <Link to="/" className={styles.menu}>
+              Home
+            </Link>
+          ) : null}
+          {login ? (
+            <Link to="/cadastro" className={styles.menu}>
+              Cadastro
+            </Link>
+          ) : null}
+        </div>
         {data && (
           <div className="header-nav">
             <Link className={styles.login} to="/">
