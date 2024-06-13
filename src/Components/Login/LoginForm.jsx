@@ -8,7 +8,7 @@ import styles from "./LoginForm.module.css";
 import { Link } from "react-router-dom";
 
 const LoginForm = () => {
-  const email = useForm();
+  const email = useForm("email");
   const password = useForm();
   const { userLogin, error, loading } = React.useContext(UserContext);
 

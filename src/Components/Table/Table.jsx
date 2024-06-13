@@ -147,33 +147,6 @@ const Table = ({ data }) => {
     [tempStatus]
   );
 
-  // [
-  //   ({
-  //     centro_custo: "Centro Teste",
-  //     descricao: "Desc teste",
-  //     fornecedor: " BANCO C6 S.A.",
-  //     id_aprovador: 5,
-  //     id_conta: 8,
-  //     id_solicitante: 5,
-  //     nf: "0102",
-  //     observacao: "Obs teste",
-  //     status: 1,
-  //     valor: "1000",
-  //   },
-  //   {
-  //     centro_custo: "Teste 2",
-  //     descricao: "Teste 2 ",
-  //     fornecedor: " E C GUALBERTO & CIA LTDA",
-  //     id_aprovador: 5,
-  //     id_conta: 9,
-  //     id_solicitante: 5,
-  //     nf: "123",
-  //     observacao: "Teste 2",
-  //     status: 2,
-  //     valor: "8000",
-  //   })
-  // ];
-
   const { getTableProps, getTableBodyProps, headerGroups, rows, prepareRow } =
     useTable({ columns, data }, useFilters);
 
