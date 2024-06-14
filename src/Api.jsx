@@ -1,4 +1,4 @@
-export const API_URL = "http://127.0.0.1:3302";
+export const API_URL = "http://apicontas.megalinkpiaui.com.br:8443";
 
 export function TOKEN_POST(body) {
   return {
@@ -87,16 +87,19 @@ export function APROVADOR_GET(token) {
   };
 }
 
-export function CONTA_POST(token, body) {
+export function CONTA_POST(token, data, file) {
+  const formData = new FormData();
+  const jsonData = data;
+  formData.append("json", JSON.stringify(jsonData));
+  formData.append("file", file);
   return {
     url: API_URL + "/conta",
     options: {
       method: "POST",
       headers: {
         Authorization: token,
-        "Content-Type": "application/json",
       },
-      body: JSON.stringify(body),
+      body: formData,
     },
   };
 }

@@ -18,13 +18,17 @@ const Cadastro = () => {
   const descricao = useForm();
   const observacao = useForm();
   const solicitante = useForm();
+  const [file, setFile] = React.useState();
   const { loading, data } = React.useContext(UserContext);
+
+  async function handleFile(event) {
+    setFile(event.target.files[0]);
+  }
 
   async function PostProduto(
     centro,
     fornecedor,
     valor,
-    nf,
     descricao,
     observacao,
     aprovador,
@@ -34,33 +38,30 @@ const Cadastro = () => {
       centro,
       fornecedor,
       valor,
-      nf,
       descricao,
       observacao,
       aprovador,
       solicitante,
     };
     const token = window.localStorage.getItem("token");
-    const { url, options } = CONTA_POST(token, body);
+    const { url, options } = CONTA_POST(token, body, file);
     const response = await fetch(url, options);
     const json = await response.json();
   }
 
   async function handleSubmit(event) {
     event.preventDefault();
-
     if (
       centroCusto.validate() &&
       valor.validate() &&
-      nf.validate() &&
       descricao.validate() &&
-      observacao.validate()
+      observacao.validate() &&
+      file !== undefined
     ) {
       PostProduto(
         centroCusto.value,
         fornecedor,
         valor.value,
-        nf.value,
         descricao.value,
         observacao.value,
         Number(aprovador),
@@ -103,7 +104,7 @@ const Cadastro = () => {
       <div className="content">
         <div className="container container-cadastro">
           <Head title={data.name} />
-          <h1 className='title'>Cadastro</h1>
+          <h1 className="title">Cadastro</h1>
           <form onSubmit={handleSubmit}>
             <Input
               className="input"
@@ -147,7 +148,7 @@ const Cadastro = () => {
               name="valor"
               {...valor}
             />
-            <Input className="input" label="NF" type="text" name="nf" {...nf} />
+
             <Input
               className="input"
               label="Descrição"
@@ -200,7 +201,14 @@ const Cadastro = () => {
               {...solicitante}
             />
 
-            {loading ? (
+            <Input
+              label="Anexo"
+              type="file"
+              name="file"
+              onChange={handleFile}
+            />
+
+            {loading || file === undefined ? (
               <Button disabled>Cadastrar</Button>
             ) : (
               <Button>Cadastrar</Button>

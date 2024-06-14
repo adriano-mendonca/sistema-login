@@ -172,6 +172,11 @@ td {
   cursor: not-allowed;
 }
 
+a.anexo {
+  color: white;
+  text-decoration: underline;
+}
+
 @keyframes animeLeft {
   to {
     opacity: 1;

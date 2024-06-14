@@ -75,11 +75,6 @@ const Table = ({ data }) => {
         Filter: "",
       },
       {
-        accessor: "nf",
-        Header: "NF",
-        Filter: "",
-      },
-      {
         accessor: "descricao",
         Header: "Descrição",
         Filter: "",
@@ -98,6 +93,23 @@ const Table = ({ data }) => {
         accessor: "usuario_solicitante",
         Header: "Solicitante",
         Filter: "",
+      },
+      {
+        accessor: "path",
+        Header: "Anexo",
+        Filter: "",
+        Cell: ({ row }) => (
+          <a
+            href={
+              `https://apicontas.megalinkpiaui.com.br/files/` +
+              row.original.path
+            }
+            className="anexo"
+            target="_blank"
+          >
+            Files
+          </a>
+        ),
       },
       {
         accessor: "status",
