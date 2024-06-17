@@ -1,4 +1,4 @@
-export const API_URL = "http://apicontas.megalinkpiaui.com.br:8443";
+export const API_URL = "https://apicontas.megalinkpiaui.com.br:8443";
 
 export function TOKEN_POST(body) {
   return {
@@ -107,6 +107,18 @@ export function CONTA_POST(token, data, file) {
 export function CONTA_GET(token) {
   return {
     url: API_URL + "/conta/lista",
+    options: {
+      method: "GET",
+      headers: {
+        Authorization: token,
+      },
+    },
+  };
+}
+
+export function CENTRO_GET(token) {
+  return {
+    url: API_URL + "/api/centro",
     options: {
       method: "GET",
       headers: {

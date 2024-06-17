@@ -4,22 +4,29 @@ import { Head } from "../Head";
 import Button from "../Forms/Buttton";
 import UserContext from "../../UserContext";
 import useForm from "../../Hooks/useForm";
-import { APROVADOR_GET, CONTA_POST, FORNECEDOR_GET } from "../../Api";
+import {
+  APROVADOR_GET,
+  CENTRO_GET,
+  CONTA_POST,
+  FORNECEDOR_GET,
+} from "../../Api";
 import styles from "./Cadastro.module.css";
+import Message from "../../Helper/Message";
 
 const Cadastro = () => {
   const [fornecedores, setFornecedores] = React.useState(null);
   const [aprovadores, setAprovadores] = React.useState(null);
   const [fornecedor, setFornecedor] = React.useState(null);
   const [aprovador, setAprovador] = React.useState(null);
-  const centroCusto = useForm();
+  const [centros, setCentros] = React.useState(null);
+  const [centroCusto, setCentroCusto] = React.useState(null);
+  const [mensagem, setMensagem] = React.useState(null);
   const valor = useForm();
-  const nf = useForm();
   const descricao = useForm();
   const observacao = useForm();
   const solicitante = useForm();
   const [file, setFile] = React.useState();
-  const { loading, data } = React.useContext(UserContext);
+  const { loading, data, setLoading } = React.useContext(UserContext);
 
   async function handleFile(event) {
     setFile(event.target.files[0]);
@@ -43,23 +50,38 @@ const Cadastro = () => {
       aprovador,
       solicitante,
     };
-    const token = window.localStorage.getItem("token");
-    const { url, options } = CONTA_POST(token, body, file);
-    const response = await fetch(url, options);
-    const json = await response.json();
+    try {
+      const token = window.localStorage.getItem("token");
+      const { url, options } = CONTA_POST(token, body, file);
+      setLoading(true);
+      const response = await fetch(url, options);
+      const json = await response.json();
+      if (response.ok) {
+        setMensagem(json.message);
+        if (mensagem) {
+          console.log("teste");
+        }
+      }
+    } catch (err) {
+      console.log(err);
+    } finally {
+      setTimeout(() => {
+        setLoading(false);
+        setMensagem(null);
+      }, 2000);
+    }
   }
 
   async function handleSubmit(event) {
     event.preventDefault();
     if (
-      centroCusto.validate() &&
       valor.validate() &&
       descricao.validate() &&
       observacao.validate() &&
       file !== undefined
     ) {
       PostProduto(
-        centroCusto.value,
+        centroCusto,
         fornecedor,
         valor.value,
         descricao.value,
@@ -70,31 +92,43 @@ const Cadastro = () => {
     }
   }
 
-  React.useEffect(() => {
-    async function getFornecedores() {
-      const token = window.localStorage.getItem("token");
-      if (token) {
-        const { url, options } = FORNECEDOR_GET(token);
-        const response = await fetch(url, options);
-        const json = await response.json();
-        setFornecedores(json);
-      }
+  async function getFornecedores() {
+    const token = window.localStorage.getItem("token");
+    if (token) {
+      const { url, options } = FORNECEDOR_GET(token);
+      const response = await fetch(url, options);
+      const json = await response.json();
+      setFornecedores(json);
     }
+  }
 
-    async function getAprovadores() {
-      const token = window.localStorage.getItem("token");
-      if (token) {
-        const { url, options } = APROVADOR_GET(token);
-        const response = await fetch(url, options);
-        const json = await response.json();
-        setAprovadores(json);
-      }
+  async function getAprovadores() {
+    const token = window.localStorage.getItem("token");
+    if (token) {
+      const { url, options } = APROVADOR_GET(token);
+      const response = await fetch(url, options);
+      const json = await response.json();
+      setAprovadores(json);
     }
+  }
+
+  async function getCentro() {
+    const token = window.localStorage.getItem("token");
+    if (token) {
+      const { options, url } = CENTRO_GET(token);
+      const response = await fetch(url, options);
+      const json = await response.json();
+      setCentros(json);
+    }
+  }
+
+  React.useEffect(() => {
     if (data) {
       solicitante.setValue(data.name);
     }
-    getAprovadores();
     getFornecedores();
+    getAprovadores();
+    getCentro();
   }, [data]);
 
   if (data === null) return null;
@@ -106,13 +140,35 @@ const Cadastro = () => {
           <Head title={data.name} />
           <h1 className="title">Cadastro</h1>
           <form onSubmit={handleSubmit}>
-            <Input
-              className="input"
-              label="Centro de Custos"
-              type="text"
+            <label htmlFor="centro">Centro de Custos</label>
+            <select
               name="centro"
-              {...centroCusto}
-            />
+              id="centro"
+              aria-placeholder="Selecione um Centro de Custos"
+              className={styles.select}
+              defaultValue={1}
+              required
+              onChange={({ currentTarget }) =>
+                setCentroCusto(currentTarget.value)
+              }
+            >
+              <option value="1" disabled className={styles.option}>
+                Selecione o Centro de Custo
+              </option>
+              {centros
+                ? centros.map((centro) => (
+                    <option
+                      value={centro.descricao}
+                      required
+                      className={styles.option}
+                      key={centro.id_centro_custo}
+                    >
+                      {centro.descricao}
+                    </option>
+                  ))
+                : null}
+            </select>
+            <label htmlFor="fornecedores">Centro de Custos</label>
             <select
               name="fornecedores"
               id="fornecedores"
@@ -127,6 +183,19 @@ const Cadastro = () => {
               <option value="1" disabled className={styles.option}>
                 Selecione o Fornecedor
               </option>
+              {centros
+                ? centros.map((centro) => (
+                    <option
+                      value={centro.descricao}
+                      required
+                      className={styles.option}
+                      key={centro.id_centro_custo}
+                    >
+                      {centro.descricao}
+                    </option>
+                  ))
+                : null}
+
               {fornecedores
                 ? fornecedores.map((fornecedor) => (
                     <option
@@ -143,7 +212,7 @@ const Cadastro = () => {
 
             <Input
               className="input"
-              label="Valor"
+              label="Valor (apenas números)"
               type="number"
               name="valor"
               {...valor}
@@ -163,7 +232,7 @@ const Cadastro = () => {
               name="observacao"
               {...observacao}
             />
-
+            <label htmlFor="aprovador">Aprovador</label>
             <select
               name="aprovador"
               id="aprovador"
@@ -209,7 +278,10 @@ const Cadastro = () => {
             />
 
             {loading || file === undefined ? (
-              <Button disabled>Cadastrar</Button>
+              <div className={styles.containerButton}>
+                <Button disabled>Cadastrar</Button>
+                {mensagem ? <Message text={mensagem} /> : null}
+              </div>
             ) : (
               <Button>Cadastrar</Button>
             )}

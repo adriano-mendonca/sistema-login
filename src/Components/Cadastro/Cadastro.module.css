@@ -14,3 +14,9 @@ h1 {
 .input {
   margin-bottom: 1rem;
 }
+
+.containerButton {
+  display: flex;
+  width: 100%;
+  justify-content: space-between;
+}

@@ -7,7 +7,8 @@ import UserContext from "../../UserContext";
 const Table = ({ data }) => {
   const [tableData, setTableData] = React.useState(data);
   const [tempStatus, setTempStatus] = React.useState({});
-  const { data: userData } = React.useContext(UserContext);
+  const [mensagem, setMensagem] = React.useState(null);
+  const { data: userData, loading, setLoading } = React.useContext(UserContext);
 
   const statusMap = {
     Aprovado: 1,
@@ -40,16 +41,35 @@ const Table = ({ data }) => {
     };
 
     const token = window.localStorage.getItem("token");
-    if (token) {
-      const { url, options } = STATUS_POST(token, body);
-      const response = await fetch(url, options);
-      const json = await response.json();
+    try {
+      if (token) {
+        const { url, options } = STATUS_POST(token, body);
+        const response = await fetch(url, options);
+        const json = await response.json();
+        setLoading(true);
+        setMensagem(json.message);
+        if (rowToUpdate) {
+          rowToUpdate.status = reverseStatusMap[parseInt(newStatus, 10)];
+          setTableData(newData);
+        }
+      }
+    } catch (err) {
+      console.log(err);
+    } finally {
+      setTimeout(() => {
+        setLoading(false);
+        setMensagem(null);
+      }, 2000);
     }
+  }
 
-    if (rowToUpdate) {
-      rowToUpdate.status = reverseStatusMap[parseInt(newStatus, 10)];
-      setTableData(newData);
-    }
+  function handleClick({ target }) {
+    target.innerText = "";
+    target.classList.add("loader");
+    setTimeout(() => {
+      target.innerText = "Salvar";
+      target.classList.remove("loader");
+    }, 1500);
   }
 
   const columns = React.useMemo(
@@ -101,7 +121,7 @@ const Table = ({ data }) => {
         Cell: ({ row }) => (
           <a
             href={
-              `https://apicontas.megalinkpiaui.com.br/files/` +
+              `https://apicontas.megalinkpiaui.com.br:8443/files/` +
               row.original.path
             }
             className="anexo"
@@ -119,7 +139,7 @@ const Table = ({ data }) => {
           if (!filterValue) return rows;
           return rows.filter((row) => {
             const rowValue = row.values[id];
-            return rowValue !== undefined
+            return rowValue !== undefined && rowValue !== null
               ? rowValue.includes(filterValue)
               : true;
           });
@@ -132,19 +152,35 @@ const Table = ({ data }) => {
               gap: "5px",
             }}
           >
-            <select
-              className="select"
-              value={
-                tempStatus[row.index] ?? statusMap[row.original.status] ?? ""
-              }
-              onChange={(e) => handleStatusChange(row.index, e.target.value)}
-            >
-              <option value="1">Aprovado</option>
-              <option value="2">Pendente</option>
-              <option value="3">Rejeitado </option>
-            </select>
             {userData.name === row.original.usuario_aprovador ? (
-              <button className="button" type="submit">
+              <select
+                className="select"
+                value={
+                  tempStatus[row.index] ?? statusMap[row.original.status] ?? ""
+                }
+                onChange={(e) => handleStatusChange(row.index, e.target.value)}
+              >
+                <option value="1">Aprovado</option>
+                <option value="2">Pendente</option>
+                <option value="3">Rejeitado </option>
+              </select>
+            ) : (
+              <select
+                className="select"
+                value={
+                  tempStatus[row.index] ?? statusMap[row.original.status] ?? ""
+                }
+                onChange={(e) => handleStatusChange(row.index, e.target.value)}
+                disabled
+              >
+                <option value="1">Aprovado</option>
+                <option value="2">Pendente</option>
+                <option value="3">Rejeitado </option>
+              </select>
+            )}
+
+            {userData.name === row.original.usuario_aprovador ? (
+              <button className="button" type="submit" onClick={handleClick}>
                 Salvar
               </button>
             ) : (

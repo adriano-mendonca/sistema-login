@@ -1,0 +1,10 @@
+.containerMsg {
+  color: #fff;
+  background-color: #51a351;
+  height: 3rem;
+  width: 18rem;
+  text-align: center;
+  padding-top: 1rem;
+  border-radius: 4px;
+  box-shadow: 2px 3px 4px rgba(0, 0, 0, 0.5);
+}
