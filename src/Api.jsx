@@ -37,13 +37,14 @@ export function USER_GET(token) {
   };
 }
 
-export function USER_POST(body) {
+export function USER_POST(body, token) {
   return {
     url: API_URL + "/user/create",
     options: {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
+        Authorization: token,
       },
       body: JSON.stringify(body),
     },

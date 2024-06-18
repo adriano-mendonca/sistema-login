@@ -11,7 +11,8 @@ import {
   FORNECEDOR_GET,
 } from "../../Api";
 import styles from "./Cadastro.module.css";
-import Message from "../../Helper/Message";
+import useFetch from "../../Hooks/useFetch";
+import Error from "../../Helper/Error";
 
 const Cadastro = () => {
   const [fornecedores, setFornecedores] = React.useState(null);
@@ -20,13 +21,13 @@ const Cadastro = () => {
   const [aprovador, setAprovador] = React.useState(null);
   const [centros, setCentros] = React.useState(null);
   const [centroCusto, setCentroCusto] = React.useState(null);
-  const [mensagem, setMensagem] = React.useState(null);
   const valor = useForm();
   const descricao = useForm();
   const observacao = useForm();
   const solicitante = useForm();
   const [file, setFile] = React.useState();
-  const { loading, data, setLoading } = React.useContext(UserContext);
+  const { data } = React.useContext(UserContext);
+  const { loading, error, request } = useFetch();
 
   async function handleFile(event) {
     setFile(event.target.files[0]);
@@ -53,22 +54,10 @@ const Cadastro = () => {
     try {
       const token = window.localStorage.getItem("token");
       const { url, options } = CONTA_POST(token, body, file);
-      setLoading(true);
-      const response = await fetch(url, options);
-      const json = await response.json();
-      if (response.ok) {
-        setMensagem(json.message);
-        if (mensagem) {
-          console.log("teste");
-        }
-      }
+      const { response, json } = await request(url, options);
+      // if(response.ok) { colocar um retorno visual}
     } catch (err) {
       console.log(err);
-    } finally {
-      setTimeout(() => {
-        setLoading(false);
-        setMensagem(null);
-      }, 2000);
     }
   }
 
@@ -89,6 +78,11 @@ const Cadastro = () => {
         Number(aprovador),
         data.id
       );
+
+      valor.setValue("");
+      descricao.setValue("");
+      observacao.setValue("");
+      solicitante.setValue("");
     }
   }
 
@@ -96,8 +90,7 @@ const Cadastro = () => {
     const token = window.localStorage.getItem("token");
     if (token) {
       const { url, options } = FORNECEDOR_GET(token);
-      const response = await fetch(url, options);
-      const json = await response.json();
+      const { json } = await request(url, options);
       setFornecedores(json);
     }
   }
@@ -106,8 +99,7 @@ const Cadastro = () => {
     const token = window.localStorage.getItem("token");
     if (token) {
       const { url, options } = APROVADOR_GET(token);
-      const response = await fetch(url, options);
-      const json = await response.json();
+      const { json } = await request(url, options);
       setAprovadores(json);
     }
   }
@@ -116,8 +108,7 @@ const Cadastro = () => {
     const token = window.localStorage.getItem("token");
     if (token) {
       const { options, url } = CENTRO_GET(token);
-      const response = await fetch(url, options);
-      const json = await response.json();
+      const { json } = await request(url, options);
       setCentros(json);
     }
   }
@@ -168,7 +159,7 @@ const Cadastro = () => {
                   ))
                 : null}
             </select>
-            <label htmlFor="fornecedores">Centro de Custos</label>
+            <label htmlFor="fornecedores">Fornecedor</label>
             <select
               name="fornecedores"
               id="fornecedores"
@@ -277,14 +268,14 @@ const Cadastro = () => {
               onChange={handleFile}
             />
 
-            {loading || file === undefined ? (
+            {loading ? (
               <div className={styles.containerButton}>
-                <Button disabled>Cadastrar</Button>
-                {mensagem ? <Message text={mensagem} /> : null}
+                <Button disabled>Cadastrando...</Button>
               </div>
             ) : (
               <Button>Cadastrar</Button>
             )}
+            <Error error={error} />
           </form>
         </div>
       </div>

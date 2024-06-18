@@ -3,7 +3,6 @@ import { Route, Routes, Navigate } from "react-router-dom";
 import LoginForm from "./LoginForm";
 import UserContext from "../../UserContext";
 import styles from "./Login.module.css";
-import LoginCreate from "./LoginCreate";
 import { Head } from "../Head";
 import NotFound from "../NotFound";
 
@@ -17,7 +16,6 @@ const Login = () => {
       <div className={styles.forms}>
         <Routes>
           <Route path="/" element={<LoginForm />} />
-          <Route path="create" element={<LoginCreate />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
       </div>

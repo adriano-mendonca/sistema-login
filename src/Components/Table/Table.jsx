@@ -3,12 +3,13 @@ import { useFilters, useTable } from "react-table";
 import StatusColumnFilter from "../ColumnFilter/StatusColumnFilter";
 import { CONTA_GET, STATUS_POST } from "../../Api";
 import UserContext from "../../UserContext";
+import useFetch from "../../Hooks/useFetch"
 
 const Table = ({ data }) => {
   const [tableData, setTableData] = React.useState(data);
   const [tempStatus, setTempStatus] = React.useState({});
-  const [mensagem, setMensagem] = React.useState(null);
-  const { data: userData, loading, setLoading } = React.useContext(UserContext);
+  const { data: userData } = React.useContext(UserContext);
+  const { loading, error, request } = useFetch();
 
   const statusMap = {
     Aprovado: 1,
@@ -44,10 +45,7 @@ const Table = ({ data }) => {
     try {
       if (token) {
         const { url, options } = STATUS_POST(token, body);
-        const response = await fetch(url, options);
-        const json = await response.json();
-        setLoading(true);
-        setMensagem(json.message);
+        const { json }= await request(url, options);
         if (rowToUpdate) {
           rowToUpdate.status = reverseStatusMap[parseInt(newStatus, 10)];
           setTableData(newData);
@@ -55,11 +53,6 @@ const Table = ({ data }) => {
       }
     } catch (err) {
       console.log(err);
-    } finally {
-      setTimeout(() => {
-        setLoading(false);
-        setMensagem(null);
-      }, 2000);
     }
   }
 

@@ -1,3 +1,9 @@
+.login {
+  background-color: #fff;
+  padding: 2rem;
+  border-radius: 2rem;
+}
+
 .perdeu {
   display: inline-block;
   color: #666;
@@ -11,4 +17,23 @@
   width: 100%;
   background: currentColor;
   display: block;
+}
+
+.select {
+  height: 2.5rem;
+  width: 100%;
+  font-size: 14px;
+  border-radius: 0.4rem;
+  margin-bottom: 1rem;
+}
+
+.containerRadio {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 1rem;
+}
+
+.radio {
+  display: flex;
+  margin-bottom: 8px;
 }

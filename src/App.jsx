@@ -7,6 +7,8 @@ import { UserStorage } from "./UserContext.jsx";
 import ProtectedRoute from "./Helper/ProtectedRouter.jsx";
 import Cadastro from "./Components/Cadastro/Cadastro.jsx";
 import NotFound from "./Components/NotFound.jsx";
+import LoginCreate from "./Components/Login/LoginCreate.jsx";
+import PermissionGate from "./Components/PermissionGate/PermissionGate.jsx";
 
 const App = () => {
   return (
@@ -32,6 +34,16 @@ const App = () => {
               }
             />
             <Route path="/login/*" element={<Login />} />
+            <Route
+              path="/usuarios"
+              element={
+                <ProtectedRoute>
+                  <PermissionGate>
+                    <LoginCreate />
+                  </PermissionGate>
+                </ProtectedRoute>
+              }
+            />
             <Route path="*" element={<NotFound />} />
           </Routes>
         </UserStorage>

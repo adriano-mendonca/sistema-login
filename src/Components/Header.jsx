@@ -3,6 +3,7 @@ import styles from "./Header.module.css";
 import { Link } from "react-router-dom";
 import Logo from "../Assets/logo.svg?react";
 import { UserContext } from "../UserContext";
+import PermissionGate from "./PermissionGate/PermissionGate";
 
 const Header = () => {
   const { data, userLogout, login } = React.useContext(UserContext);
@@ -24,6 +25,11 @@ const Header = () => {
               Cadastro
             </Link>
           ) : null}
+          <PermissionGate>
+            <Link to="/usuarios" className={styles.menu}>
+              Criar Usuário
+            </Link>
+          </PermissionGate>
         </div>
         {data && (
           <div className="header-nav">
