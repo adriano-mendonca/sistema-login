@@ -33,7 +33,7 @@ const Header = () => {
         </div>
         {data && (
           <div className="header-nav">
-            <Link className={styles.login} to="/">
+            <Link className={styles.login} to="/reset">
               {data.name}
             </Link>
             <button className="exit" onClick={userLogout}>

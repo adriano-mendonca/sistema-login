@@ -17,7 +17,6 @@ const LoginCreate = () => {
   const { loading, error, request } = useFetch();
 
   function handleRadio({ target }) {
-    console.log(target.value);
     setRadio(target.value);
   }
 
@@ -39,7 +38,6 @@ const LoginCreate = () => {
       name.setValue("");
       email.setValue("");
       password.setValue("");
-      setTipo(0);
     }
   }
 

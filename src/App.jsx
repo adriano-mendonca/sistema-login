@@ -9,6 +9,7 @@ import Cadastro from "./Components/Cadastro/Cadastro.jsx";
 import NotFound from "./Components/NotFound.jsx";
 import LoginCreate from "./Components/Login/LoginCreate.jsx";
 import PermissionGate from "./Components/PermissionGate/PermissionGate.jsx";
+import LoginReset from "./Components/Login/LoginReset.jsx";
 
 const App = () => {
   return (
@@ -30,6 +31,14 @@ const App = () => {
               element={
                 <ProtectedRoute>
                   <Cadastro />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/reset"
+              element={
+                <ProtectedRoute>
+                  <LoginReset />
                 </ProtectedRoute>
               }
             />

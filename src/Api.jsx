@@ -51,13 +51,14 @@ export function USER_POST(body, token) {
   };
 }
 
-export function PASSWORD_LOST(body) {
+export function PASSWORD_RESET(body, token) {
   return {
-    url: API_URL + "/user/password/lost",
+    url: API_URL + "/user/password/reset",
     options: {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
+        Authorization: token,
       },
       body: JSON.stringify(body),
     },
