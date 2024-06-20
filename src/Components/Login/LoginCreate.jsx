@@ -47,7 +47,7 @@ const LoginCreate = () => {
       <form className={styles.form} onSubmit={handleSubmit}>
         <Input label="Nome" type="text" name="nome" {...name} />
         <Input label="Email" type="text" name="email" {...email} />
-        <Input label="Senha" type="text" name="password" {...password} />
+        <Input label="Senha" type="password" name="password" {...password} />
         <label htmlFor="centro">Tipo de Usuário</label>
         <select
           name="centro"
@@ -66,6 +66,9 @@ const LoginCreate = () => {
           </option>
           <option value="2" className={styles.option}>
             Comum
+          </option>
+          <option value="3" className={styles.option}>
+            Financeiro
           </option>
         </select>
         <div className={styles.containerRadio}>

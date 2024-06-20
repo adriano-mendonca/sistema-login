@@ -6,6 +6,7 @@ const StatusColumnFilter = ({ column: { filterValue, setFilter } }) => {
     { value: "Aprovado", label: "Aprovado" },
     { value: "Pendente", label: "Pendente" },
     { value: "Rejeitado", label: "Rejeitado" },
+    { value: "Pago", label: "Pago" },
   ];
 
   return (
